@@ -1,0 +1,25 @@
+#!/bin/sh
+
+CUS_CONF="${SNAP_DATA}/custom_config"
+
+test -f $CUS_CONF && rm $CUS_CONF
+
+if ! http_port=$(snapctl get port); then
+    echo "Port is: $http_port "
+    exit 1
+fi
+
+if ! max_clients=$(snapctl get max-clients); then
+    echo "The number of clients is: $max_clients"
+    exit 1
+fi
+
+if ! start_servers=$(snapctl get start-servers); then
+    echo "The number of servers is: $start_servers"
+    exit 1
+fi
+
+echo "Port=$http_port" > $CUS_CONF
+echo "MaxClients=$max_clients" >> $CUS_CONF
+echo "StartServers=$start_servers" >> $CUS_CONF
+chmod 600 $CUS_CONF
